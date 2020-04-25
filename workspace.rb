@@ -21,10 +21,10 @@ class Workspace
 
     puts "#{current}"
     puts "----------------"
-    puts "Added #{title} to your #{notebook.join('/')} notebook"
+    puts "Added '#{title}' to your #{notebook.join('/')} notebook"
   end
 
-  def notes_folder 
+  def notes_folder
     config['notes_folder']
   end
 
@@ -38,6 +38,6 @@ class Workspace
     File.open(CONFIG_FILE, 'w') {|file| file.truncate(0) }
     File.open(CONFIG_FILE, 'r+') do |f|
       YAML.dump(current_config, f)
-    end    
+    end
   end
 end
