@@ -8,14 +8,19 @@ notes -w homeflow
 "You're now in homeflow workspace"
 ```
 
-add a note
+check which workspace you're in
 ```bash
-notes -a notebook note_title
-"note_title added in path_to_note"
-"opening note..."
+notes -w?
 ```
 
-list notes from a notebook
+adding a note
 ```bash
-notes -l notebook
+notes -n notebook 'note name'
+```
+- should create the notebook if not present
+- should create the note in the notebook
+
+adding a note in a subdirectory
+```bash
+notes -n notebook/subdirectory 'note name'
 ```
