@@ -10,7 +10,8 @@ notes -w homeflow
 
 check which workspace you're in
 ```bash
-notes -w ?
+notes
+'Current workspace is homeflow'
 ```
 
 adding a note
