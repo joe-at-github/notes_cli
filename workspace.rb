@@ -6,6 +6,11 @@ require 'fileutils'
 class Workspace
   CONFIG_FILE = '/Users/joeffreylamy/Documents/notes/notes_cli/config.yml'
 
+  def initialize
+    path = FileUtils.pwd
+    FileUtils.touch("#{path}/config.yml") unless File.file?("#{path}/config.yml")    
+  end
+
   def config
     YAML.load(File.read(CONFIG_FILE))
   end
