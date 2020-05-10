@@ -12,8 +12,8 @@ class Workspace
 
   def create_note(title, notebook)
     raise 'no note notebook given' unless notebook
-    full_dir_path = File.join(notes_folder, current, notebook)
 
+    full_dir_path = File.join(notes_folder, current, notebook)
     FileUtils.mkdir_p(full_dir_path)
     FileUtils.cd(full_dir_path)
     FileUtils.touch("#{title}.md")
@@ -26,8 +26,8 @@ class Workspace
 
   def delete_note(title, notebook)
     raise 'no note notebook given' unless notebook
+    
     full_dir_path = File.join(notes_folder, current, notebook)
-
     FileUtils.cd(full_dir_path)
     FileUtils.rm("#{title}.md")
     FileUtils.cd(File.join(notes_folder, current))
@@ -37,28 +37,16 @@ class Workspace
     puts "Deleted '#{title}' to your #{notebook.join('/')} notebook"
   end
 
-  def prompt_notes_folder_setup
-    puts 'Which folder are you going to be storing your notes in?'
-    puts 'please provide a full path e.g path/to/my/notes'
-    folder =  STDIN.gets.chomp
-    update_entry('notes_folder', folder)
-  end
-
-  def prompt_workspace_setup
-    puts 'No workspace registered'
-    puts 'Please provide the name of the workspace you like to add your note to'
-    workspace =  STDIN.gets.chomp
-    update_entry('workspace', workspace)
-  end
-
   def current
-    config['workspace']
+    return config['workspace'] if config && config['workspace']
+
+    raise 'please set your workspace'
   end
 
   def notes_folder
     return config['notes_folder'] if config && config['notes_folder']
 
-    prompt_notes_folder_setup
+    raise 'please set your notes_folder'
   end
 
   def update_entry(key, value)
