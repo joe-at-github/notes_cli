@@ -24,10 +24,17 @@ class Workspace
     puts "Added '#{title}' to your #{notebook.join('/')} notebook"
   end
 
-  def notes_folder
-    return config['notes_folder'] if config && config['notes_folder']
+  def delete_note(title, notebook)
+    raise 'no note notebook given' unless notebook
+    full_dir_path = File.join(notes_folder, current, notebook)
 
-    prompt_notes_folder_setup
+    FileUtils.cd(full_dir_path)
+    FileUtils.rm("#{title}.md")
+    FileUtils.cd(File.join(notes_folder, current))
+
+    puts "#{current}"
+    puts "----------------"
+    puts "Deleted '#{title}' to your #{notebook.join('/')} notebook"
   end
 
   def prompt_notes_folder_setup
@@ -37,6 +44,14 @@ class Workspace
 
   def current
     config['workspace']
+  end
+
+  private
+
+  def notes_folder
+    return config['notes_folder'] if config && config['notes_folder']
+
+    prompt_notes_folder_setup
   end
 
   def update_entry(key, value)
