@@ -25,7 +25,14 @@ class Workspace
   end
 
   def notes_folder
-    config['notes_folder']
+    return config['notes_folder'] if config && config['notes_folder']
+
+    prompt_notes_folder_setup
+  end
+
+  def prompt_notes_folder_setup
+    folder =  STDIN.gets.chomp
+    update_entry('notes_folder', folder)
   end
 
   def current
@@ -34,8 +41,8 @@ class Workspace
 
   def update_entry(key, value)
     current_config = config
-    current_config[key] = value.strip.chomp
-    File.open(CONFIG_FILE, 'w') {|file| file.truncate(0) }
+    current_config ? current_config[key] = value.strip.chomp : current_config = { key => value }
+    File.open(CONFIG_FILE, 'w') { |file| file.truncate(0) }
     File.open(CONFIG_FILE, 'r+') do |f|
       YAML.dump(current_config, f)
     end
