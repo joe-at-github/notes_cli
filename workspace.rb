@@ -38,15 +38,22 @@ class Workspace
   end
 
   def prompt_notes_folder_setup
+    puts 'Which folder are you going to be storing your notes in?'
+    puts 'please provide a full path e.g path/to/my/notes'
     folder =  STDIN.gets.chomp
     update_entry('notes_folder', folder)
+  end
+
+  def prompt_workspace_setup
+    puts 'No workspace registered'
+    puts 'Please provide the name of the workspace you like to add your note to'
+    workspace =  STDIN.gets.chomp
+    update_entry('workspace', workspace)
   end
 
   def current
     config['workspace']
   end
-
-  private
 
   def notes_folder
     return config['notes_folder'] if config && config['notes_folder']
