@@ -4,15 +4,15 @@ require 'yaml'
 require 'fileutils'
 
 class Workspace
-  CONFIG_FILE = '/Users/joeffreylamy/Documents/notes/notes_cli/config.yml'
+  ROOTH_PATH = File.expand_path File.dirname(__FILE__)
+  CONFIG_PATH = File.join(ROOTH_PATH, 'config.yml')
 
   def initialize
-    path = FileUtils.pwd
-    FileUtils.touch("#{path}/config.yml") unless File.file?("#{path}/config.yml")    
+    FileUtils.touch(CONFIG_PATH) unless File.file?(CONFIG_PATH)    
   end
 
   def config
-    YAML.load(File.read(CONFIG_FILE))
+    YAML.load(File.read(CONFIG_PATH))
   end
 
   def create_note(title, notebook)
@@ -57,8 +57,8 @@ class Workspace
   def update_entry(key, value)
     current_config = config
     current_config ? current_config[key] = value.strip.chomp : current_config = { key => value }
-    File.open(CONFIG_FILE, 'w') { |file| file.truncate(0) }
-    File.open(CONFIG_FILE, 'r+') do |f|
+    File.open(CONFIG_PATH, 'w') { |file| file.truncate(0) }
+    File.open(CONFIG_PATH, 'r+') do |f|
       YAML.dump(current_config, f)
     end
   end
