@@ -54,6 +54,24 @@ class Workspace
     raise 'please set your notes_folder'
   end
 
+  def switch_workspace(workspace)
+    unless exists?(workspace)
+      puts "this workspace does not currently exist and will be created, do you wish to continue?"
+      prompt = gets.chomp
+      return if prompt != 'y'
+    end
+
+    update_entry('workspace', workspace)    
+  end
+
+  def exists?(workspace)
+    full_dir_path = File.join(notes_folder, workspace)
+    Dir.glob("#{notes_folder}/*/")
+       .select { |entry| File.directory? entry }
+       .map { |full_path| File.basename(full_path) }
+       .include?(workspace)
+  end
+
   def update_entry(key, value)
     current_config = config
     current_config ? current_config[key] = value.strip.chomp : current_config = { key => value }
