@@ -21,6 +21,7 @@ class Workspace
     raise ArgumentError, 'no notebook specified' if !notebook || notebook.compact.empty?
     raise ArgumentError, 'no note title specified' if !title || title.empty?
 
+    notebook = notebook.join
     full_dir_path = File.join(notes_folder, current, notebook)
     return unless notebook_exists?(notebook) || create?('notebook')
 
@@ -31,13 +32,15 @@ class Workspace
 
     puts current.to_s
     puts '----------------'
-    puts "Added '#{title}' to your #{notebook.join('/')} notebook"
+    puts "Added '#{title}' to your #{notebook} notebook"
+    puts File.join(full_dir_path, "#{title}.md")
   end
 
   def delete_note(title, notebook)
     raise ArgumentError, 'no notebook specified' if !notebook || notebook.compact.empty?
     raise ArgumentError, 'no note title specified' if !title || title.empty?
 
+    notebook = notebook.join
     full_dir_path = File.join(notes_folder, current, notebook)
     FileUtils.cd(full_dir_path)
     FileUtils.rm("#{title}.md")
@@ -45,7 +48,7 @@ class Workspace
 
     puts current.to_s
     puts '----------------'
-    puts "Deleted '#{title}' from your #{notebook.join('/')} notebook"
+    puts "Deleted '#{title}' from your #{notebook} notebook"
   end
 
   def current
