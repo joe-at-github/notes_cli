@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../workspace'
 require 'fakefs/safe'
 
@@ -8,7 +10,7 @@ RSpec.describe Workspace do
 
       it 'creates a config.yml if one does not already exists' do
         FakeFS do
-          app = File.expand_path('../../', __FILE__)
+          app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
           expect { subject }.to change { File.file?(described_class::CONFIG_PATH) }
@@ -24,13 +26,13 @@ RSpec.describe Workspace do
 
       it 'raises an error' do
         FakeFS do
-          app = File.expand_path('../../', __FILE__)
+          app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
 
           expect { subject.current }.to raise_error(StandardError, 'Please set your workspace')
         end
-      end   
+      end
     end
 
     context 'workspace setup' do
@@ -38,7 +40,7 @@ RSpec.describe Workspace do
 
       it 'doesnt raise an error' do
         FakeFS do
-          app = File.expand_path('../../', __FILE__)
+          app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
           described_class.new.update_entry('notes_folder', app)
@@ -46,7 +48,7 @@ RSpec.describe Workspace do
 
           expect { subject.current }.to_not raise_error
         end
-      end   
+      end
     end
   end
 
@@ -56,7 +58,7 @@ RSpec.describe Workspace do
 
       it 'raises an error' do
         FakeFS do
-          app = File.expand_path('../../', __FILE__)
+          app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
           described_class.new.update_entry('workspace', 'test_workspace')
@@ -64,7 +66,7 @@ RSpec.describe Workspace do
           expect { subject.notes_folder }
             .to raise_error(StandardError, 'Please set your notes_folder')
         end
-      end   
+      end
     end
 
     context 'notes folder setup' do
@@ -72,7 +74,7 @@ RSpec.describe Workspace do
 
       it 'doesnt raise an error' do
         FakeFS do
-          app = File.expand_path('../../', __FILE__)
+          app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
           described_class.new.update_entry('workspace', 'test_workspace')
@@ -80,7 +82,7 @@ RSpec.describe Workspace do
 
           expect { subject.notes_folder }.to_not raise_error
         end
-      end   
+      end
     end
   end
 
@@ -92,13 +94,13 @@ RSpec.describe Workspace do
         it 'asks for creation confirmation' do
           FakeFS do
             allow(STDIN).to receive(:gets).and_return('y')
-            app = File.expand_path('../../', __FILE__)
+            app = File.expand_path('..', __dir__)
             FakeFS::FileSystem.clone(app)
             FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
             described_class.new.update_entry('notes_folder', app)
 
             expect(subject).to receive(:create?).with('workspace')
-            subject.switch_workspace('test_workspace') 
+            subject.switch_workspace('test_workspace')
           end
         end
       end
@@ -107,13 +109,13 @@ RSpec.describe Workspace do
         it 'updates the workspace details' do
           FakeFS do
             allow(STDIN).to receive(:gets).and_return('y')
-            app = File.expand_path('../../', __FILE__)
+            app = File.expand_path('..', __dir__)
             FakeFS::FileSystem.clone(app)
             FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
             described_class.new.update_entry('notes_folder', app)
 
             expect(subject).to receive(:update_entry).with('workspace', 'test_workspace')
-            subject.switch_workspace('test_workspace') 
+            subject.switch_workspace('test_workspace')
           end
         end
       end
@@ -127,7 +129,7 @@ RSpec.describe Workspace do
       it 'ask for creation confirmation' do
         FakeFS do
           allow(STDIN).to receive(:gets).and_return('y')
-          app = File.expand_path('../../', __FILE__)
+          app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
           described_class.new.update_entry('notes_folder', app)
@@ -143,14 +145,14 @@ RSpec.describe Workspace do
       it 'creates the notebook' do
         FakeFS do
           allow(STDIN).to receive(:gets).and_return('y')
-          app = File.expand_path('../../', __FILE__)
+          app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
           described_class.new.update_entry('notes_folder', app)
           described_class.new.update_entry('workspace', 'test_workspace')
 
           expect { subject.create_note('test_note', ['new_notebook']) }
-            .to change { File.directory?('new_notebook')  }.from(false).to(true)
+            .to change { File.directory?('new_notebook') }.from(false).to(true)
         end
       end
     end
@@ -159,14 +161,14 @@ RSpec.describe Workspace do
       it 'does not create the notebook' do
         FakeFS do
           allow(STDIN).to receive(:gets).and_return('n')
-          app = File.expand_path('../../', __FILE__)
+          app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
           described_class.new.update_entry('notes_folder', app)
           described_class.new.update_entry('workspace', 'test_workspace')
 
           expect { subject.create_note('test_note', ['new_notebook']) }
-            .to_not change { File.directory?('new_notebook')  }
+            .to_not change { File.directory?('new_notebook') }
         end
       end
     end
@@ -177,7 +179,7 @@ RSpec.describe Workspace do
       it 'raises an error' do
         FakeFS do
           allow(STDIN).to receive(:gets).and_return('n')
-          app = File.expand_path('../../', __FILE__)
+          app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
           described_class.new.update_entry('notes_folder', app)
@@ -193,7 +195,7 @@ RSpec.describe Workspace do
       it 'raises an error' do
         FakeFS do
           allow(STDIN).to receive(:gets).and_return('n')
-          app = File.expand_path('../../', __FILE__)
+          app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
           described_class.new.update_entry('notes_folder', app)
@@ -211,7 +213,7 @@ RSpec.describe Workspace do
       it 'raises an error' do
         FakeFS do
           allow(STDIN).to receive(:gets).and_return('n')
-          app = File.expand_path('../../', __FILE__)
+          app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
           described_class.new.update_entry('notes_folder', app)
@@ -227,7 +229,7 @@ RSpec.describe Workspace do
       it 'raises an error' do
         FakeFS do
           allow(STDIN).to receive(:gets).and_return('n')
-          app = File.expand_path('../../', __FILE__)
+          app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
           described_class.new.update_entry('notes_folder', app)
@@ -243,7 +245,7 @@ RSpec.describe Workspace do
       it 'deletes the note' do
         FakeFS do
           allow(STDIN).to receive(:gets).and_return('y')
-          app = File.expand_path('../../', __FILE__)
+          app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
           described_class.new.update_entry('notes_folder', app)
@@ -251,9 +253,9 @@ RSpec.describe Workspace do
           described_class.new.create_note('test_note', ['new_notebook'])
 
           expect { subject.delete_note('test_note', ['new_notebook']) }
-            .to change { File.file?('new_notebook/test_note.md')  }.from(true).to(false)
+            .to change { File.file?('new_notebook/test_note.md') }.from(true).to(false)
         end
-      end      
+      end
     end
   end
 end

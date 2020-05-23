@@ -1,67 +1,69 @@
+# frozen_string_literal: true
+
 require 'pry'
 require 'pry-byebug'
 require 'yaml'
 require 'fileutils'
 
 class Workspace
-  ROOTH_PATH = File.expand_path File.dirname(__FILE__)
+  ROOTH_PATH = __dir__
   CONFIG_PATH = File.join(ROOTH_PATH, 'config.yml')
 
   def initialize
-    FileUtils.touch(CONFIG_PATH) unless File.file?(CONFIG_PATH)    
+    FileUtils.touch(CONFIG_PATH) unless File.file?(CONFIG_PATH)
   end
 
   def config
-    YAML.load(File.read(CONFIG_PATH))
+    YAML.safe_load(File.read(CONFIG_PATH))
   end
 
   def create_note(title, notebook)
-    raise ArgumentError.new('no notebook specified') if notebook.empty?
-    raise ArgumentError.new('no note title specified') if title.empty?
+    raise ArgumentError, 'no notebook specified' if notebook.empty?
+    raise ArgumentError, 'no note title specified' if title.empty?
 
     full_dir_path = File.join(notes_folder, current, notebook)
     return unless notebook_exists?(notebook) || create?('notebook')
-      
+
     FileUtils.mkdir_p(full_dir_path)
     FileUtils.cd(full_dir_path)
     FileUtils.touch("#{title}.md")
     FileUtils.cd(File.join(notes_folder, current))
 
-    puts "#{current}"
-    puts "----------------"
+    puts current.to_s
+    puts '----------------'
     puts "Added '#{title}' to your #{notebook.join('/')} notebook"
   end
 
   def delete_note(title, notebook)
-    raise ArgumentError.new('no notebook specified') if notebook.empty?
-    raise ArgumentError.new('no note title specified') if title.empty?
-    
+    raise ArgumentError, 'no notebook specified' if notebook.empty?
+    raise ArgumentError, 'no note title specified' if title.empty?
+
     full_dir_path = File.join(notes_folder, current, notebook)
     FileUtils.cd(full_dir_path)
     FileUtils.rm("#{title}.md")
     FileUtils.cd(File.join(notes_folder, current))
 
-    puts "#{current}"
-    puts "----------------"
+    puts current.to_s
+    puts '----------------'
     puts "Deleted '#{title}' from your #{notebook.join('/')} notebook"
   end
 
   def current
     return config['workspace'] if config && config['workspace']
 
-    raise StandardError.new 'Please set your workspace'
+    raise StandardError, 'Please set your workspace'
   end
 
   def notes_folder
     return config['notes_folder'] if config && config['notes_folder']
 
-    raise StandardError.new 'Please set your notes_folder'
+    raise StandardError, 'Please set your notes_folder'
   end
 
   def switch_workspace(workspace)
     return unless workspace_exists?(workspace) || create?('workspace')
 
-    update_entry('workspace', workspace)    
+    update_entry('workspace', workspace)
   end
 
   def workspace_exists?(workspace)
@@ -71,12 +73,12 @@ class Workspace
        .include?(workspace)
   end
 
-   def notebook_exists?(notebook)
+  def notebook_exists?(notebook)
     Dir.glob("#{notes_folder}/#{current}/*/")
        .select { |entry| File.directory? entry }
        .map { |full_path| File.basename(full_path) }
        .include?(notebook)
-  end
+ end
 
   def create?(resource)
     puts "This #{resource} does not currently exist and will be created, "\
