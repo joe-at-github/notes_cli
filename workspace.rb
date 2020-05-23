@@ -49,13 +49,13 @@ class Workspace
   def current
     return config['workspace'] if config && config['workspace']
 
-    raise 'please set your workspace'
+    raise StandardError.new 'Please set your workspace'
   end
 
   def notes_folder
     return config['notes_folder'] if config && config['notes_folder']
 
-    raise 'please set your notes_folder'
+    raise StandardError.new 'Please set your notes_folder'
   end
 
   def switch_workspace(workspace)

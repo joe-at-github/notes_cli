@@ -18,6 +18,72 @@ RSpec.describe Workspace do
     end
   end
 
+  describe '#current' do
+    context 'no workspace setup' do
+      subject { described_class.new }
+
+      it 'raises an error' do
+        FakeFS do
+          app = File.expand_path('../../', __FILE__)
+          FakeFS::FileSystem.clone(app)
+          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+
+          expect { subject.current }.to raise_error(StandardError, 'Please set your workspace')
+        end
+      end   
+    end
+
+    context 'workspace setup' do
+      subject { described_class.new }
+
+      it 'doesnt raise an error' do
+        FakeFS do
+          app = File.expand_path('../../', __FILE__)
+          FakeFS::FileSystem.clone(app)
+          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          described_class.new.update_entry('notes_folder', app)
+          described_class.new.update_entry('workspace', 'test_workspace')
+
+          expect { subject.current }.to_not raise_error
+        end
+      end   
+    end
+  end
+
+  describe '#notes_folder' do
+    context 'no notes folder setup' do
+      subject { described_class.new }
+
+      it 'raises an error' do
+        FakeFS do
+          app = File.expand_path('../../', __FILE__)
+          FakeFS::FileSystem.clone(app)
+          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          described_class.new.update_entry('workspace', 'test_workspace')
+
+          expect { subject.notes_folder }
+            .to raise_error(StandardError, 'Please set your notes_folder')
+        end
+      end   
+    end
+
+    context 'notes folder setup' do
+      subject { described_class.new }
+
+      it 'doesnt raise an error' do
+        FakeFS do
+          app = File.expand_path('../../', __FILE__)
+          FakeFS::FileSystem.clone(app)
+          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          described_class.new.update_entry('workspace', 'test_workspace')
+          described_class.new.update_entry('notes_folder', app)
+
+          expect { subject.notes_folder }.to_not raise_error
+        end
+      end   
+    end
+  end
+
   describe 'switching workspaces' do
     context 'given the workspace did not exist' do
       subject { described_class.new }
@@ -108,7 +174,7 @@ RSpec.describe Workspace do
 
   describe 'creating notes' do
     context 'note title not specified' do
-      it 'should raise an error' do
+      it 'raises an error' do
         FakeFS do
           allow(STDIN).to receive(:gets).and_return('n')
           app = File.expand_path('../../', __FILE__)
@@ -124,7 +190,7 @@ RSpec.describe Workspace do
     end
 
     context 'notebook not specified' do
-      it 'should raise an error' do
+      it 'raises an error' do
         FakeFS do
           allow(STDIN).to receive(:gets).and_return('n')
           app = File.expand_path('../../', __FILE__)
@@ -142,7 +208,7 @@ RSpec.describe Workspace do
 
   describe 'deleting notes' do
     context 'note title not specified' do
-      it 'should raise an error' do
+      it 'raises an error' do
         FakeFS do
           allow(STDIN).to receive(:gets).and_return('n')
           app = File.expand_path('../../', __FILE__)
@@ -158,7 +224,7 @@ RSpec.describe Workspace do
     end
 
     context 'notebook not specified' do
-      it 'should raise an error' do
+      it 'raises an error' do
         FakeFS do
           allow(STDIN).to receive(:gets).and_return('n')
           app = File.expand_path('../../', __FILE__)
