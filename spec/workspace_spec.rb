@@ -36,4 +36,56 @@ RSpec.describe Workspace do
       end
     end
   end
+
+  describe 'creating notebooks' do
+    subject { described_class.new }
+
+    context 'confirmation' do
+      it 'ask for creation confirmation' do
+        FakeFS do
+          allow(STDIN).to receive(:gets).and_return('y')
+          app = File.expand_path('../../', __FILE__)
+          FakeFS::FileSystem.clone(app)
+          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          subject.update_entry('notes_folder', app)
+          subject.update_entry('workspace', 'test_workspace')
+
+          expect(subject).to receive(:create?).with('notebook')
+          subject.create_note('test_note', ['new_notebook'])
+        end
+      end
+    end
+
+    context 'user confirmed' do
+      it 'creates the notebook' do
+        FakeFS do
+          allow(STDIN).to receive(:gets).and_return('y')
+          app = File.expand_path('../../', __FILE__)
+          FakeFS::FileSystem.clone(app)
+          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          subject.update_entry('notes_folder', app)
+          subject.update_entry('workspace', 'test_workspace')
+
+          expect { subject.create_note('test_note', ['new_notebook']) }
+            .to change { File.directory?('new_notebook')  }.from(false).to(true)
+        end
+      end
+    end
+
+    context 'user did not consent' do
+      it 'does not create the notebook' do
+        FakeFS do
+          allow(STDIN).to receive(:gets).and_return('n')
+          app = File.expand_path('../../', __FILE__)
+          FakeFS::FileSystem.clone(app)
+          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          subject.update_entry('notes_folder', app)
+          subject.update_entry('workspace', 'test_workspace')
+
+          expect { subject.create_note('test_note', ['new_notebook']) }
+            .to_not change { File.directory?('new_notebook')  }
+        end
+      end
+    end
+  end
 end

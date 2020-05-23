@@ -19,6 +19,8 @@ class Workspace
     raise 'no note notebook given' unless notebook
 
     full_dir_path = File.join(notes_folder, current, notebook)
+    return unless notebook_exists?(notebook) || create?('notebook')
+      
     FileUtils.mkdir_p(full_dir_path)
     FileUtils.cd(full_dir_path)
     FileUtils.touch("#{title}.md")
@@ -55,7 +57,7 @@ class Workspace
   end
 
   def switch_workspace(workspace)
-    unless exists?(workspace)
+    unless workspace_exists?(workspace)
       puts "this workspace does not currently exist and will be created, do you wish to continue?"
       prompt = gets.chomp
       return if prompt != 'y'
@@ -64,12 +66,24 @@ class Workspace
     update_entry('workspace', workspace)    
   end
 
-  def exists?(workspace)
-    full_dir_path = File.join(notes_folder, workspace)
+  def workspace_exists?(workspace)
     Dir.glob("#{notes_folder}/*/")
        .select { |entry| File.directory? entry }
        .map { |full_path| File.basename(full_path) }
        .include?(workspace)
+  end
+
+   def notebook_exists?(notebook)
+    Dir.glob("#{notes_folder}/#{current}/*/")
+       .select { |entry| File.directory? entry }
+       .map { |full_path| File.basename(full_path) }
+       .include?(notebook)
+  end
+
+  def create?(resource)
+    puts "This #{resource} does not currently exist and will be created, "\
+         'do you wish to continue? [y/N]'
+    STDIN.gets.chomp == 'y'
   end
 
   def update_entry(key, value)
