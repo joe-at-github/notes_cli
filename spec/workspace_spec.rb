@@ -49,8 +49,8 @@ RSpec.describe Workspace do
           app = File.expand_path('../../', __FILE__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
-          subject.update_entry('notes_folder', app)
-          subject.update_entry('workspace', 'test_workspace')
+          described_class.new.update_entry('notes_folder', app)
+          described_class.new.update_entry('workspace', 'test_workspace')
 
           expect(subject).to receive(:create?).with('notebook')
           subject.create_note('test_note', ['new_notebook'])
@@ -65,8 +65,8 @@ RSpec.describe Workspace do
           app = File.expand_path('../../', __FILE__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
-          subject.update_entry('notes_folder', app)
-          subject.update_entry('workspace', 'test_workspace')
+          described_class.new.update_entry('notes_folder', app)
+          described_class.new.update_entry('workspace', 'test_workspace')
 
           expect { subject.create_note('test_note', ['new_notebook']) }
             .to change { File.directory?('new_notebook')  }.from(false).to(true)
@@ -81,8 +81,8 @@ RSpec.describe Workspace do
           app = File.expand_path('../../', __FILE__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
-          subject.update_entry('notes_folder', app)
-          subject.update_entry('workspace', 'test_workspace')
+          described_class.new.update_entry('notes_folder', app)
+          described_class.new.update_entry('workspace', 'test_workspace')
 
           expect { subject.create_note('test_note', ['new_notebook']) }
             .to_not change { File.directory?('new_notebook')  }
@@ -99,8 +99,8 @@ RSpec.describe Workspace do
           app = File.expand_path('../../', __FILE__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
-          subject.update_entry('notes_folder', app)
-          subject.update_entry('workspace', 'test_workspace')
+          described_class.new.update_entry('notes_folder', app)
+          described_class.new.update_entry('workspace', 'test_workspace')
 
           expect { subject.create_note('', ['new_notebook']) }
             .to raise_error(ArgumentError, 'no note title specified')
@@ -115,8 +115,8 @@ RSpec.describe Workspace do
           app = File.expand_path('../../', __FILE__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
-          subject.update_entry('notes_folder', app)
-          subject.update_entry('workspace', 'test_workspace')
+          described_class.new.update_entry('notes_folder', app)
+          described_class.new.update_entry('workspace', 'test_workspace')
 
           expect { subject.create_note('test_note', []) }
             .to raise_error(ArgumentError, 'no notebook specified')
@@ -133,8 +133,8 @@ RSpec.describe Workspace do
           app = File.expand_path('../../', __FILE__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
-          subject.update_entry('notes_folder', app)
-          subject.update_entry('workspace', 'test_workspace')
+          described_class.new.update_entry('notes_folder', app)
+          described_class.new.update_entry('workspace', 'test_workspace')
 
           expect { subject.delete_note('', ['new_notebook']) }
             .to raise_error(ArgumentError, 'no note title specified')
@@ -149,8 +149,8 @@ RSpec.describe Workspace do
           app = File.expand_path('../../', __FILE__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
-          subject.update_entry('notes_folder', app)
-          subject.update_entry('workspace', 'test_workspace')
+          described_class.new.update_entry('notes_folder', app)
+          described_class.new.update_entry('workspace', 'test_workspace')
 
           expect { subject.delete_note('test_note', []) }
             .to raise_error(ArgumentError, 'no notebook specified')
