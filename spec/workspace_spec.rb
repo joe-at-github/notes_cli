@@ -20,18 +20,20 @@ RSpec.describe Workspace do
 
   describe 'switching workspaces' do
     context 'given the workspace did not exist' do
-      subject { described_class.new.switch_workspace('test_worksapce') }
+      subject { described_class.new }
 
-      it 'asks for creation confirmation' do
-        FakeFS do
-          allow_any_instance_of(described_class).to receive(:gets).and_return('y')
-          app = File.expand_path('../../', __FILE__)
-          FakeFS::FileSystem.clone(app)
-          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
-          described_class.new.update_entry('notes_folder', app)
-          message = 'this workspace does not currently exist and will be created,'\
-                    " do you wish to continue?\n"
-          expect { subject }.to output(message).to_stdout
+      context 'confirmation' do
+        it 'asks for creation confirmation' do
+          FakeFS do
+            allow(STDIN).to receive(:gets).and_return('y')
+            app = File.expand_path('../../', __FILE__)
+            FakeFS::FileSystem.clone(app)
+            FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+            described_class.new.update_entry('notes_folder', app)
+
+            expect(subject).to receive(:create?).with('workspace')
+            subject.switch_workspace('test_worksapce') 
+          end
         end
       end
     end

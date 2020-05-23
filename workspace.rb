@@ -43,7 +43,7 @@ class Workspace
 
     puts "#{current}"
     puts "----------------"
-    puts "Deleted '#{title}' to your #{notebook.join('/')} notebook"
+    puts "Deleted '#{title}' from your #{notebook.join('/')} notebook"
   end
 
   def current
@@ -59,11 +59,7 @@ class Workspace
   end
 
   def switch_workspace(workspace)
-    unless workspace_exists?(workspace)
-      puts "this workspace does not currently exist and will be created, do you wish to continue?"
-      prompt = gets.chomp
-      return if prompt != 'y'
-    end
+    return unless workspace_exists?(workspace) || create?('workspace')
 
     update_entry('workspace', workspace)    
   end
