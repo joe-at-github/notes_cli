@@ -32,7 +32,22 @@ RSpec.describe Workspace do
             described_class.new.update_entry('notes_folder', app)
 
             expect(subject).to receive(:create?).with('workspace')
-            subject.switch_workspace('test_worksapce') 
+            subject.switch_workspace('test_workspace') 
+          end
+        end
+      end
+
+      context 'user confirmed' do
+        it 'updates the workspace details' do
+          FakeFS do
+            allow(STDIN).to receive(:gets).and_return('y')
+            app = File.expand_path('../../', __FILE__)
+            FakeFS::FileSystem.clone(app)
+            FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+            described_class.new.update_entry('notes_folder', app)
+
+            expect(subject).to receive(:update_entry).with('workspace', 'test_workspace')
+            subject.switch_workspace('test_workspace') 
           end
         end
       end
@@ -156,6 +171,23 @@ RSpec.describe Workspace do
             .to raise_error(ArgumentError, 'no notebook specified')
         end
       end
+    end
+
+    context 'title and notebook specified' do
+      it 'deletes the note' do
+        FakeFS do
+          allow(STDIN).to receive(:gets).and_return('y')
+          app = File.expand_path('../../', __FILE__)
+          FakeFS::FileSystem.clone(app)
+          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          described_class.new.update_entry('notes_folder', app)
+          described_class.new.update_entry('workspace', 'test_workspace')
+          described_class.new.create_note('test_note', ['new_notebook'])
+
+          expect { subject.delete_note('test_note', ['new_notebook']) }
+            .to change { File.file?('new_notebook/test_note.md')  }.from(true).to(false)
+        end
+      end      
     end
   end
 end
