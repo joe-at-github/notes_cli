@@ -88,4 +88,72 @@ RSpec.describe Workspace do
       end
     end
   end
+
+  describe 'creating notes' do
+    context 'note title not specified' do
+      it 'should raise an error' do
+        FakeFS do
+          allow(STDIN).to receive(:gets).and_return('n')
+          app = File.expand_path('../../', __FILE__)
+          FakeFS::FileSystem.clone(app)
+          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          subject.update_entry('notes_folder', app)
+          subject.update_entry('workspace', 'test_workspace')
+
+          expect { subject.create_note('', ['new_notebook']) }
+            .to raise_error(ArgumentError, 'no note title specified')
+        end
+      end
+    end
+
+    context 'notebook not specified' do
+      it 'should raise an error' do
+        FakeFS do
+          allow(STDIN).to receive(:gets).and_return('n')
+          app = File.expand_path('../../', __FILE__)
+          FakeFS::FileSystem.clone(app)
+          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          subject.update_entry('notes_folder', app)
+          subject.update_entry('workspace', 'test_workspace')
+
+          expect { subject.create_note('test_note', []) }
+            .to raise_error(ArgumentError, 'no notebook specified')
+        end
+      end
+    end
+  end
+
+  describe 'deleting notes' do
+    context 'note title not specified' do
+      it 'should raise an error' do
+        FakeFS do
+          allow(STDIN).to receive(:gets).and_return('n')
+          app = File.expand_path('../../', __FILE__)
+          FakeFS::FileSystem.clone(app)
+          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          subject.update_entry('notes_folder', app)
+          subject.update_entry('workspace', 'test_workspace')
+
+          expect { subject.delete_note('', ['new_notebook']) }
+            .to raise_error(ArgumentError, 'no note title specified')
+        end
+      end
+    end
+
+    context 'notebook not specified' do
+      it 'should raise an error' do
+        FakeFS do
+          allow(STDIN).to receive(:gets).and_return('n')
+          app = File.expand_path('../../', __FILE__)
+          FakeFS::FileSystem.clone(app)
+          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          subject.update_entry('notes_folder', app)
+          subject.update_entry('workspace', 'test_workspace')
+
+          expect { subject.delete_note('test_note', []) }
+            .to raise_error(ArgumentError, 'no notebook specified')
+        end
+      end
+    end
+  end
 end

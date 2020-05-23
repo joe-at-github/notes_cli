@@ -16,7 +16,8 @@ class Workspace
   end
 
   def create_note(title, notebook)
-    raise 'no note notebook given' unless notebook
+    raise ArgumentError.new('no notebook specified') if notebook.empty?
+    raise ArgumentError.new('no note title specified') if title.empty?
 
     full_dir_path = File.join(notes_folder, current, notebook)
     return unless notebook_exists?(notebook) || create?('notebook')
@@ -32,7 +33,8 @@ class Workspace
   end
 
   def delete_note(title, notebook)
-    raise 'no note notebook given' unless notebook
+    raise ArgumentError.new('no notebook specified') if notebook.empty?
+    raise ArgumentError.new('no note title specified') if title.empty?
     
     full_dir_path = File.join(notes_folder, current, notebook)
     FileUtils.cd(full_dir_path)
