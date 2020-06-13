@@ -91,4 +91,10 @@ class Workspace
       YAML.dump(current_config, f)
     end
   end
+
+  def list_notes(notebook)
+    raise StandardError, 'no such notebook' unless notebook_exists?(notebook)
+
+    Dir.glob(File.join(notes_folder, current, notebook, '/*'))
+  end
 end

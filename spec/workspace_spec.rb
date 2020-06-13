@@ -258,4 +258,38 @@ RSpec.describe Workspace do
       end
     end
   end
+
+  describe 'listing notes' do
+    it 'list notes in the given notebook' do
+      FakeFS do
+        allow(STDIN).to receive(:gets).and_return('y')
+        app = File.expand_path('..', __dir__)
+        FakeFS::FileSystem.clone(app)
+        FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+        described_class.new.update_entry('notes_folder', app)
+        described_class.new.update_entry('workspace', 'test_workspace')
+        described_class.new.create_note('new_notebook', ['test_note'])
+        note_path = File.join('new_notebook', 'test_note.md')
+
+        expect(subject.list_notes('new_notebook')).to include(note_path)
+      end
+    end
+
+    context 'notebook does not exist' do
+      it 'raises an error' do
+        FakeFS do
+          allow(STDIN).to receive(:gets).and_return('y')
+          app = File.expand_path('..', __dir__)
+          FakeFS::FileSystem.clone(app)
+          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          described_class.new.update_entry('notes_folder', app)
+          described_class.new.update_entry('workspace', 'test_workspace')
+          described_class.new.create_note('new_notebook', ['test_note'])
+
+          expect { subject.list_notes('not_here') }
+            .to raise_error(StandardError, 'no such notebook')
+        end
+      end
+    end
+  end
 end
