@@ -17,11 +17,11 @@ class Workspace
     YAML.safe_load(File.read(CONFIG_PATH))
   end
 
-  def create_note(title, notebook)
-    raise ArgumentError, 'no notebook specified' if !notebook || notebook.compact.empty?
-    raise ArgumentError, 'no note title specified' if !title || title.empty?
+  def create_note(notebook, title)
+    raise ArgumentError, 'no notebook specified' if !notebook || notebook.empty?
+    raise ArgumentError, 'no note title specified' if !title || title.compact.empty?
 
-    notebook = notebook.join
+    title = title.join('_')
     full_dir_path = File.join(notes_folder, current, notebook)
     return unless notebook_exists?(notebook) || create?('notebook')
 
@@ -36,11 +36,11 @@ class Workspace
     puts File.join(full_dir_path, "#{title}.md")
   end
 
-  def delete_note(title, notebook)
-    raise ArgumentError, 'no notebook specified' if !notebook || notebook.compact.empty?
-    raise ArgumentError, 'no note title specified' if !title || title.empty?
+  def delete_note(notebook, title)
+    raise ArgumentError, 'no notebook specified' if !notebook || notebook.empty?
+    raise ArgumentError, 'no note title specified' if !title || title.compact.empty?
 
-    notebook = notebook.join
+    title = title.join('_')
     full_dir_path = File.join(notes_folder, current, notebook)
     FileUtils.cd(full_dir_path)
     FileUtils.rm("#{title}.md")

@@ -45,7 +45,7 @@ notes_folder/
 # Usage
 ## Create a note in the current workspace
 ```bash
-notes -n note_title notebook
+notes -n notebook note_title
 ```
 
 ## Switching workspaces
@@ -61,16 +61,16 @@ notes
 
 ## Switching workspace and creating a note there
 ```bash
-notes -w workspace_name -n note_title notebook
+notes -w workspace_name -n notebook note_title
 ```
 
 ## Creating a note in a nested notebook
 ```bash
-notes -n note_title path/to/notebook
+notes -n path/to/notebook note_title
 ```
 e.g
 ```bash
-notes -n list_of_charities saving_the_world/doing_charity_work
+notes -n saving_the_world/doing_charity_work list_of_charities
 ```
 
 will produce

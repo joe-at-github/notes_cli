@@ -136,7 +136,7 @@ RSpec.describe Workspace do
           described_class.new.update_entry('workspace', 'test_workspace')
 
           expect(subject).to receive(:create?).with('notebook')
-          subject.create_note('test_note', ['new_notebook'])
+          subject.create_note(['new_notebook'], 'test_note')
         end
       end
     end
@@ -151,7 +151,7 @@ RSpec.describe Workspace do
           described_class.new.update_entry('notes_folder', app)
           described_class.new.update_entry('workspace', 'test_workspace')
 
-          expect { subject.create_note('test_note', ['new_notebook']) }
+          expect { subject.create_note(['new_notebook'], 'test_note') }
             .to change { File.directory?('new_notebook') }.from(false).to(true)
         end
       end
@@ -167,7 +167,7 @@ RSpec.describe Workspace do
           described_class.new.update_entry('notes_folder', app)
           described_class.new.update_entry('workspace', 'test_workspace')
 
-          expect { subject.create_note('test_note', ['new_notebook']) }
+          expect { subject.create_note(['new_notebook'], 'test_note') }
             .to_not change { File.directory?('new_notebook') }
         end
       end
@@ -185,7 +185,7 @@ RSpec.describe Workspace do
           described_class.new.update_entry('notes_folder', app)
           described_class.new.update_entry('workspace', 'test_workspace')
 
-          expect { subject.create_note('', ['new_notebook']) }
+          expect { subject.create_note(['new_notebook'], '') }
             .to raise_error(ArgumentError, 'no note title specified')
         end
       end
@@ -201,7 +201,7 @@ RSpec.describe Workspace do
           described_class.new.update_entry('notes_folder', app)
           described_class.new.update_entry('workspace', 'test_workspace')
 
-          expect { subject.create_note('test_note', []) }
+          expect { subject.create_note([], 'test_note') }
             .to raise_error(ArgumentError, 'no notebook specified')
         end
       end
@@ -219,7 +219,7 @@ RSpec.describe Workspace do
           described_class.new.update_entry('notes_folder', app)
           described_class.new.update_entry('workspace', 'test_workspace')
 
-          expect { subject.delete_note('', ['new_notebook']) }
+          expect { subject.delete_note(['new_notebook'], '') }
             .to raise_error(ArgumentError, 'no note title specified')
         end
       end
@@ -235,7 +235,7 @@ RSpec.describe Workspace do
           described_class.new.update_entry('notes_folder', app)
           described_class.new.update_entry('workspace', 'test_workspace')
 
-          expect { subject.delete_note('test_note', []) }
+          expect { subject.delete_note([], 'test_note') }
             .to raise_error(ArgumentError, 'no notebook specified')
         end
       end
@@ -250,9 +250,9 @@ RSpec.describe Workspace do
           FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
           described_class.new.update_entry('notes_folder', app)
           described_class.new.update_entry('workspace', 'test_workspace')
-          described_class.new.create_note('test_note', ['new_notebook'])
+          described_class.new.create_note(['new_notebook'], 'test_note')
 
-          expect { subject.delete_note('test_note', ['new_notebook']) }
+          expect { subject.delete_note(['new_notebook'], 'test_note') }
             .to change { File.file?('new_notebook/test_note.md') }.from(true).to(false)
         end
       end
