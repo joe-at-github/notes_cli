@@ -77,10 +77,7 @@ class Workspace
   end
 
   def notebook_exists?(notebook)
-    Dir.glob("#{notes_folder}/#{current}/*/")
-       .select { |entry| File.directory? entry }
-       .map { |full_path| File.basename(full_path) }
-       .include?(notebook)
+    Dir.glob(File.join(notes_folder, current, notebook)).any?
  end
 
   def create?(resource)
