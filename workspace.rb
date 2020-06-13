@@ -70,10 +70,7 @@ class Workspace
   end
 
   def workspace_exists?(workspace)
-    Dir.glob("#{notes_folder}/*/")
-       .select { |entry| File.directory? entry }
-       .map { |full_path| File.basename(full_path) }
-       .include?(workspace)
+    Dir.glob(File.join(notes_folder, workspace)).any?
   end
 
   def notebook_exists?(notebook)
