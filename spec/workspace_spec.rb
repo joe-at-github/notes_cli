@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-require_relative '../workspace'
+require_relative '../lib/notes_cli.rb'
+require_relative '../lib/notes_cli/models/workspace'
 require 'fakefs/safe'
 
 RSpec.describe Workspace do
@@ -12,8 +13,8 @@ RSpec.describe Workspace do
         FakeFS do
           app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
-          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
-          expect { subject }.to change { File.file?(described_class::CONFIG_PATH) }
+          FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
+          expect { subject }.to change { File.file?(NotesCli::CONFIG_PATH) }
             .from(false).to(true)
         end
       end
@@ -28,7 +29,7 @@ RSpec.describe Workspace do
         FakeFS do
           app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
-          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
 
           expect { subject.current }.to raise_error(StandardError, 'Please set your workspace')
         end
@@ -42,7 +43,7 @@ RSpec.describe Workspace do
         FakeFS do
           app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
-          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
           described_class.new.update_entry('notes_folder', app)
           described_class.new.update_entry('workspace', 'test_workspace')
 
@@ -60,7 +61,7 @@ RSpec.describe Workspace do
         FakeFS do
           app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
-          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
           described_class.new.update_entry('workspace', 'test_workspace')
 
           expect { subject.notes_folder }
@@ -76,7 +77,7 @@ RSpec.describe Workspace do
         FakeFS do
           app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
-          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
           described_class.new.update_entry('workspace', 'test_workspace')
           described_class.new.update_entry('notes_folder', app)
 
@@ -96,7 +97,7 @@ RSpec.describe Workspace do
             allow(STDIN).to receive(:gets).and_return('y')
             app = File.expand_path('..', __dir__)
             FakeFS::FileSystem.clone(app)
-            FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+            FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
             described_class.new.update_entry('notes_folder', app)
 
             expect(subject).to receive(:create?).with('workspace')
@@ -111,7 +112,7 @@ RSpec.describe Workspace do
             allow(STDIN).to receive(:gets).and_return('y')
             app = File.expand_path('..', __dir__)
             FakeFS::FileSystem.clone(app)
-            FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+            FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
             described_class.new.update_entry('notes_folder', app)
 
             expect(subject).to receive(:update_entry).with('workspace', 'test_workspace')
@@ -131,7 +132,7 @@ RSpec.describe Workspace do
           allow(STDIN).to receive(:gets).and_return('y')
           app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
-          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
           described_class.new.update_entry('notes_folder', app)
           described_class.new.update_entry('workspace', 'test_workspace')
 
@@ -147,7 +148,7 @@ RSpec.describe Workspace do
           allow(STDIN).to receive(:gets).and_return('y')
           app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
-          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
           described_class.new.update_entry('notes_folder', app)
           described_class.new.update_entry('workspace', 'test_workspace')
 
@@ -163,7 +164,7 @@ RSpec.describe Workspace do
           allow(STDIN).to receive(:gets).and_return('n')
           app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
-          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
           described_class.new.update_entry('notes_folder', app)
           described_class.new.update_entry('workspace', 'test_workspace')
 
@@ -181,7 +182,7 @@ RSpec.describe Workspace do
           allow(STDIN).to receive(:gets).and_return('n')
           app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
-          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
           described_class.new.update_entry('notes_folder', app)
           described_class.new.update_entry('workspace', 'test_workspace')
 
@@ -197,11 +198,11 @@ RSpec.describe Workspace do
           allow(STDIN).to receive(:gets).and_return('n')
           app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
-          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
           described_class.new.update_entry('notes_folder', app)
           described_class.new.update_entry('workspace', 'test_workspace')
 
-          expect { subject.create_note([], 'test_note') }
+          expect { subject.create_note(' ', ['test_note']) }
             .to raise_error(ArgumentError, 'no notebook specified')
         end
       end
@@ -215,7 +216,7 @@ RSpec.describe Workspace do
           allow(STDIN).to receive(:gets).and_return('n')
           app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
-          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
           described_class.new.update_entry('notes_folder', app)
           described_class.new.update_entry('workspace', 'test_workspace')
 
@@ -231,7 +232,7 @@ RSpec.describe Workspace do
           allow(STDIN).to receive(:gets).and_return('n')
           app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
-          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
           described_class.new.update_entry('notes_folder', app)
           described_class.new.update_entry('workspace', 'test_workspace')
 
@@ -247,7 +248,7 @@ RSpec.describe Workspace do
           allow(STDIN).to receive(:gets).and_return('y')
           app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
-          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
           described_class.new.update_entry('notes_folder', app)
           described_class.new.update_entry('workspace', 'test_workspace')
           described_class.new.create_note('new_notebook', ['test_note'])
@@ -265,7 +266,7 @@ RSpec.describe Workspace do
         allow(STDIN).to receive(:gets).and_return('y')
         app = File.expand_path('..', __dir__)
         FakeFS::FileSystem.clone(app)
-        FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+        FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
         described_class.new.update_entry('notes_folder', app)
         described_class.new.update_entry('workspace', 'test_workspace')
         described_class.new.create_note('new_notebook', ['test_note'])
@@ -281,7 +282,7 @@ RSpec.describe Workspace do
           allow(STDIN).to receive(:gets).and_return('y')
           app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
-          FileUtils.rm(described_class::CONFIG_PATH) if File.file?(described_class::CONFIG_PATH)
+          FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
           described_class.new.update_entry('notes_folder', app)
           described_class.new.update_entry('workspace', 'test_workspace')
           described_class.new.create_note('new_notebook', ['test_note'])

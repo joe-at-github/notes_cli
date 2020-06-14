@@ -1,4 +1,6 @@
 class NoteCreator
+  include Modules::ResourceUtils
+
   def initialize(notebook, title, note_path, workspace_path)
     @notebook = notebook
     @title = title.join('_')
@@ -15,6 +17,8 @@ class NoteCreator
   private
 
   def handle_errors
+    return unless notebook_exists?(@notebook) || create?('notebook')
+
     raise ArgumentError, 'no notebook specified' if !@notebook || @notebook.empty?
     raise ArgumentError, 'no note title specified' if !@title || @title.empty?    
   end
