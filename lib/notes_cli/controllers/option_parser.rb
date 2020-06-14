@@ -23,6 +23,6 @@ OptionParser.new do |opt|
     puts "Switched to #{option} wokspace" if workspace.switch(option)
   end
   opt.on('--which_workspace ANY_CHARACTER') do |_option|
-    puts "Current workspace is #{workspace.current}"
+    puts "Current workspace is #{workspace.current_workspace}"
   end
 end.parse!

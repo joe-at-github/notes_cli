@@ -18,9 +18,9 @@ class Workspace
     title = title.join('_')
     FileUtils.cd(note_path(notebook))
     FileUtils.rm("#{title}.md")
-    FileUtils.cd(File.join(notes_folder, current))
+    FileUtils.cd(File.join(notes_folder, current_workspace))
 
-    puts current.to_s
+    puts current_workspace.to_s
     puts '----------------'
     puts "Deleted '#{title}' from your #{notebook} notebook"
   end
@@ -44,7 +44,7 @@ class Workspace
     raise StandardError, 'no such notebook' unless notebook_exists?(notebook)
 
     {}.tap do |entries|
-      Dir.glob(File.join(notes_folder, current, notebook, '/*')).sort.each do |path|
+      Dir.glob(File.join(notes_folder, current_workspace, notebook, '/*')).sort.each do |path|
         entries[File.basename(path)] = path
       end
     end
