@@ -101,7 +101,7 @@ RSpec.describe Workspace do
             described_class.new.update_entry('notes_folder', app)
 
             expect(subject).to receive(:create?).with('workspace')
-            subject.switch_workspace('test_workspace')
+            subject.switch('test_workspace')
           end
         end
       end
@@ -116,7 +116,7 @@ RSpec.describe Workspace do
             described_class.new.update_entry('notes_folder', app)
 
             expect(subject).to receive(:update_entry).with('workspace', 'test_workspace')
-            subject.switch_workspace('test_workspace')
+            subject.switch('test_workspace')
           end
         end
       end

@@ -25,7 +25,7 @@ class Workspace
     puts "Deleted '#{title}' from your #{notebook} notebook"
   end
 
-  def switch_workspace(workspace)
+  def switch(workspace)
     return unless workspace_exists?(workspace) || create?('workspace')
 
     update_entry('workspace', workspace)

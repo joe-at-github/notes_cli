@@ -20,7 +20,7 @@ OptionParser.new do |opt|
     workspace.update_entry('notes_folder', option)
   end
   opt.on('-w --workspace WORKSPACE') do |option|
-    puts "Switched to #{option} wokspace" if workspace.switch_workspace(option)
+    puts "Switched to #{option} wokspace" if workspace.switch(option)
   end
   opt.on('--which_workspace ANY_CHARACTER') do |_option|
     puts "Current workspace is #{workspace.current}"
