@@ -4,6 +4,7 @@ require 'pry'
 require 'pry-byebug'
 require 'yaml'
 require 'fileutils'
+require_relative 'lib/note_creator.rb'
 
 class Workspace
   ROOTH_PATH = __dir__
@@ -18,22 +19,9 @@ class Workspace
   end
 
   def create_note(notebook, title)
-    raise ArgumentError, 'no notebook specified' if !notebook || notebook.empty?
-    raise ArgumentError, 'no note title specified' if !title || title.compact.empty?
-
-    title = title.join('_')
-    full_dir_path = File.join(notes_folder, current, notebook)
     return unless notebook_exists?(notebook) || create?('notebook')
 
-    FileUtils.mkdir_p(full_dir_path)
-    FileUtils.cd(full_dir_path)
-    FileUtils.touch("#{title}.md")
-    FileUtils.cd(File.join(notes_folder, current))
-
-    puts current.to_s
-    puts '----------------'
-    puts "Added '#{title}' to your #{notebook} notebook"
-    puts File.join(full_dir_path, "#{title}.md")
+    NoteCreator.new(notebook, title, note_path(notebook), workspace_path).call
   end
 
   def delete_note(notebook, title)
@@ -41,8 +29,7 @@ class Workspace
     raise ArgumentError, 'no note title specified' if !title || title.compact.empty?
 
     title = title.join('_')
-    full_dir_path = File.join(notes_folder, current, notebook)
-    FileUtils.cd(full_dir_path)
+    FileUtils.cd(note_path(notebook))
     FileUtils.rm("#{title}.md")
     FileUtils.cd(File.join(notes_folder, current))
 
@@ -51,16 +38,25 @@ class Workspace
     puts "Deleted '#{title}' from your #{notebook} notebook"
   end
 
-  def current
-    return config['workspace'] if config && config['workspace']
 
-    raise StandardError, 'Please set your workspace'
+  def note_path(notebook)
+    @note_path ||= File.join(notes_folder, current, notebook)
+  end
+
+  def workspace_path
+    File.join(notes_folder, current)
   end
 
   def notes_folder
     return config['notes_folder'] if config && config['notes_folder']
 
     raise StandardError, 'Please set your notes_folder'
+  end
+
+  def current
+    return config['workspace'] if config && config['workspace']
+
+    raise StandardError, 'Please set your workspace'
   end
 
   def switch_workspace(workspace)
