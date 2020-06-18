@@ -1,10 +1,10 @@
 class NoteCreator
   include Modules::ResourceUtils
 
-  def initialize(notebook, title, note_path, workspace_path)
+  def initialize(notebook, title, notebook_path, workspace_path)
     @notebook = notebook
     @title = title.join('_')
-    @note_path = note_path
+    @notebook_path = notebook_path
     @workspace_path = workspace_path
   end
 
@@ -24,8 +24,8 @@ class NoteCreator
   end
 
   def create_note
-    FileUtils.mkdir_p(@note_path)
-    FileUtils.cd(@note_path)
+    FileUtils.mkdir_p(@notebook_path)
+    FileUtils.cd(@notebook_path)
     FileUtils.touch("#{@title}.md")
     FileUtils.cd(@workspace_path)
   end
@@ -34,6 +34,6 @@ class NoteCreator
     puts File.basename(@workspace_path)
     puts '----------------'
     puts "Added '#{@title}' to your #{@notebook} notebook"
-    puts File.join(@note_path, "#{@title}.md")
+    puts File.join(@notebook_path, "#{@title}.md")
   end
 end
