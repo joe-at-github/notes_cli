@@ -12,5 +12,5 @@ require 'fileutils'
 require 'optparse'
 require File.join(NotesCli::ROOTH_PATH, 'notes_cli', 'modules', 'modules.rb')
 require File.join(NotesCli::ROOTH_PATH, 'notes_cli', 'models', 'workspace.rb')
-require File.join(NotesCli::ROOTH_PATH, 'notes_cli', 'services', 'note_creator.rb')
+require File.join(NotesCli::ROOTH_PATH, 'notes_cli', 'services', 'services.rb')
 require File.join(NotesCli::ROOTH_PATH, 'notes_cli', 'controllers', 'option_parser.rb')

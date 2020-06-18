@@ -5,7 +5,11 @@ module Modules
     end
 
     def notebook_exists?(notebook)
-      Dir.glob(File.join(notes_folder, current_workspace, notebook)).any?
+      Dir.exist?(File.join(notes_folder, current_workspace, notebook))
+    end
+
+    def workspace_exists?(workspace)
+      Dir.exist?(File.join(notes_folder, workspace))
     end
 
     def create?(resource)
@@ -14,12 +18,10 @@ module Modules
       STDIN.gets.chomp == 'y'
     end
 
-    def note_path(notebook)
-      @note_path ||= File.join(notes_folder, current_workspace, notebook)
-    end
+    def current_workspace
+      return config['workspace'] if config && config['workspace']
 
-    def workspace_path
-      File.join(notes_folder, current_workspace)
+      raise StandardError, 'Please set your workspace'
     end
 
     def notes_folder
@@ -28,14 +30,12 @@ module Modules
       raise StandardError, 'Please set your notes_folder'
     end
 
-    def current_workspace
-      return config['workspace'] if config && config['workspace']
-
-      raise StandardError, 'Please set your workspace'
+    def notebook_path(notebook)
+      @notebook_path ||= File.join(notes_folder, current_workspace, notebook)
     end
 
-    def workspace_exists?(workspace)
-      Dir.glob(File.join(notes_folder, workspace)).any?
+    def workspace_path
+      File.join(notes_folder, current_workspace)
     end
   end
 end

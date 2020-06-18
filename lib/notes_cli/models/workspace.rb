@@ -8,21 +8,11 @@ class Workspace
   end
 
   def create_note(notebook, title)
-    NoteCreator.new(notebook, title, note_path(notebook), workspace_path).call
+    NoteCreator.new(notebook, title, notebook_path(notebook), workspace_path).call
   end
 
   def delete_note(notebook, title)
-    raise ArgumentError, 'no notebook specified' if !notebook || notebook.empty?
-    raise ArgumentError, 'no note title specified' if !title || title.compact.empty?
-
-    title = title.join('_')
-    FileUtils.cd(note_path(notebook))
-    FileUtils.rm("#{title}.md")
-    FileUtils.cd(File.join(notes_folder, current_workspace))
-
-    puts current_workspace.to_s
-    puts '----------------'
-    puts "Deleted '#{title}' from your #{notebook} notebook"
+    NoteDeleter.new(notebook, title, notebook_path(notebook), workspace_path).call
   end
 
   def switch(workspace)
