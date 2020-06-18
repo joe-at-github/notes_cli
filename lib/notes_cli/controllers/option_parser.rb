@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 workspace = Workspace.new
 
 if ARGV.empty?

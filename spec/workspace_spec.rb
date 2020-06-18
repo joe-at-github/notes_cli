@@ -12,7 +12,7 @@ RSpec.describe Workspace do
           app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
-          
+
           expect { subject }.to change { File.file?(NotesCli::CONFIG_PATH) }
             .from(false).to(true)
         end
