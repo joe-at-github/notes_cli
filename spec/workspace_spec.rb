@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../lib/notes_cli.rb'
-require_relative '../lib/notes_cli/models/workspace'
-require 'fakefs/safe'
+require File.expand_path(File.join('..', 'lib', 'notes_cli'), __dir__)
 
 RSpec.describe Workspace do
   describe '#initialize' do
@@ -14,6 +12,7 @@ RSpec.describe Workspace do
           app = File.expand_path('..', __dir__)
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
+          
           expect { subject }.to change { File.file?(NotesCli::CONFIG_PATH) }
             .from(false).to(true)
         end
@@ -170,40 +169,6 @@ RSpec.describe Workspace do
 
           expect { subject.create_note('new_notebook', ['test_note']) }
             .to_not change { File.directory?('new_notebook') }
-        end
-      end
-    end
-  end
-
-  describe 'creating notes' do
-    context 'note title not specified' do
-      it 'raises an error' do
-        FakeFS do
-          allow(STDIN).to receive(:gets).and_return('n')
-          app = File.expand_path('..', __dir__)
-          FakeFS::FileSystem.clone(app)
-          FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
-          described_class.new.update_entry('notes_folder', app)
-          described_class.new.update_entry('workspace', 'test_workspace')
-
-          expect { subject.create_note('new_notebook', []) }
-            .to raise_error(ArgumentError, 'no note title specified')
-        end
-      end
-    end
-
-    context 'notebook not specified' do
-      it 'raises an error' do
-        FakeFS do
-          allow(STDIN).to receive(:gets).and_return('n')
-          app = File.expand_path('..', __dir__)
-          FakeFS::FileSystem.clone(app)
-          FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
-          described_class.new.update_entry('notes_folder', app)
-          described_class.new.update_entry('workspace', 'test_workspace')
-
-          expect { subject.create_note(' ', ['test_note']) }
-            .to raise_error(ArgumentError, 'no notebook specified')
         end
       end
     end
