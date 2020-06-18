@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NoteCreator
   include Modules::ResourceUtils
 
@@ -10,7 +12,7 @@ class NoteCreator
 
   def call
     return unless notebook_exists?(@notebook) || create?('notebook')
-    
+
     handle_errors
     create_note
     notify
@@ -20,7 +22,7 @@ class NoteCreator
 
   def handle_errors
     raise ArgumentError, 'no notebook specified' if !@notebook || @notebook.empty?
-    raise ArgumentError, 'no note title specified' if !@title || @title.empty?    
+    raise ArgumentError, 'no note title specified' if !@title || @title.empty?
   end
 
   def create_note

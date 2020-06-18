@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NoteDeleter
   include Modules::ResourceUtils
 
@@ -22,7 +24,7 @@ class NoteDeleter
     raise ArgumentError, 'notebook does not exist' unless notebook_exists?(@notebook)
   end
 
-  def delete_note 
+  def delete_note
     FileUtils.cd(@notebook_path)
     FileUtils.rm("#{@title}.md")
     FileUtils.cd(@workspace_path)
