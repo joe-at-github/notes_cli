@@ -2,35 +2,82 @@
 
 require File.expand_path(File.join('..', '..', '..', 'lib', 'notes_cli'), __dir__)
 
-RSpec.describe Workspace do
-  def setup_workspace
-    allow(STDIN).to receive(:gets).and_return('y')
-    app = File.expand_path('../../../', __dir__)
-    FakeFS::FileSystem.clone(app)
+RSpec.describe 'creating notes' do
+  def create_workspace
+    @app = File.expand_path('../../../', __dir__)
+    FakeFS::FileSystem.clone(@app)
     FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
-    described_class.new.update_entry('notes_folder', app)
-    described_class.new.update_entry('workspace', 'test_workspace')
+    Workspace.new.update_entry('notes_folder', @app)
+    Workspace.new.update_entry('workspace', 'test_workspace')
   end
 
-  context 'note title not specified' do
-    it 'raises an error' do
-      FakeFS do
-        setup_workspace
+  context 'notebook exists' do
+    subject { Workspace.new }
 
-        expect { subject.create_note('new_notebook', []) }
-          .to raise_error(ArgumentError, 'no note title specified')
+    def create_notebook
+      FileUtils.mkdir_p(File.join(@app, 'test_workspace', 'new_notebook'))
+    end
+
+    context 'note title not specified' do
+      it 'raises an error' do
+        FakeFS.with_fresh do
+          create_workspace
+          create_notebook
+
+          expect { subject.create_note('new_notebook', []) }
+            .to raise_error(ArgumentError, 'no note title specified')
+        end
+      end
+    end
+
+    context 'note title specified' do
+      it 'returns a success notification' do
+        FakeFS.with_fresh do
+          create_workspace
+          create_notebook
+          success_notification = /Added 'new_note' to your new_notebook notebook/
+
+          expect { subject.create_note('new_notebook', %w[new note]) }
+            .to output(success_notification).to_stdout
+        end
       end
     end
   end
 
-  context 'note title specified' do
-    it 'returns a success notification' do
-      FakeFS do
-        setup_workspace
-        success_notification = /Added 'new_note' to your new_notebook notebook/
+  context 'notebook does not exist' do
+    subject { Workspace.new.create_note('new_notebook', %w[new note]) }
 
-        expect { subject.create_note('new_notebook', ['new', 'note']) }
-          .to output(success_notification).to_stdout
+    context 'prompt' do
+      it 'asks user confirmation to create the notebook' do
+        FakeFS.with_fresh do
+          create_workspace
+          allow(STDIN).to receive(:gets).and_return('y')
+          confirmation_prompt = /This notebook does not currently exist and will be created/
+
+          expect { subject }.to output(confirmation_prompt).to_stdout
+        end
+      end
+    end
+
+    context 'user confirms' do
+      it 'creates the notebook' do
+        FakeFS.with_fresh do
+          create_workspace
+          allow(STDIN).to receive(:gets).and_return('y')
+
+          expect { subject }.to change { File.directory?('new_notebook') }.from(false).to(true)
+        end
+      end
+    end
+
+    context 'user does not consent' do
+      it 'does not create the notebook' do
+        FakeFS.with_fresh do
+          create_workspace
+          allow(STDIN).to receive(:gets).and_return('n')
+
+          expect { subject }.to_not change { File.directory?('new_notebook') }
+        end
       end
     end
   end
