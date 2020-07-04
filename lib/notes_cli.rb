@@ -11,7 +11,8 @@ require 'pry-byebug'
 require 'yaml'
 require 'fileutils'
 require 'optparse'
-require File.join(NotesCli::LIBRARY, 'modules', 'modules.rb')
-require File.join(NotesCli::LIBRARY, 'models', 'workspace.rb')
-require File.join(NotesCli::LIBRARY, 'services', 'services.rb')
-require File.join(NotesCli::LIBRARY, 'controllers', 'option_parser.rb')
+require File.join(NotesCli::LIBRARY, 'modules', 'modules')
+require File.join(NotesCli::LIBRARY, 'models', 'workspace')
+require File.join(NotesCli::LIBRARY, 'services', 'services')
+require File.join(NotesCli::LIBRARY, 'controllers', 'option_parser')
+require File.join(NotesCli::LIBRARY, 'version')
