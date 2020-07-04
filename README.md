@@ -1,10 +1,6 @@
 # Getting started
-Set `notes` as an alias to your bash profile.
-```bash
-alias notes='ruby path/to/notes_cli/notes.rb'
-```
 
-Run the inital setup command.
+Tell notes_cli where your notes will be stored.
 ```bash
 notes --notes_folder path/to/where/you/will/store/notes
 ```
