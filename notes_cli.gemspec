@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
     NotesCli lets you create workspaces and notebooks in which you can store notes.
     Notes are created as md files for ease of storing code snippets.
   }.strip.gsub(/\s+/, ' ')
-  s.authors     = ['Joe Lamy']
+  s.authors     = ['Joeffrey Lamy']
   s.email       = 'joeffreylamy41@gmail.com'
   s.files       = ['lib/notes_cli.rb']
   s.executables << 'notes'
