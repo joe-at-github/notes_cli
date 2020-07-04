@@ -5,14 +5,6 @@ require File.expand_path(File.join('..', '..', '..', 'lib', 'notes_cli'), __dir_
 RSpec.describe 'deleting notes' do
   subject { Workspace.new }
 
-  def create_workspace
-    @app = File.expand_path('../../../', __dir__)
-    FakeFS::FileSystem.clone(@app)
-    FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
-    subject.update_entry('notes_folder', @app)
-    subject.update_entry('workspace', 'test_workspace')
-  end
-
   context 'title and notebook specified' do
     context 'notebook exists' do
       it 'deletes the note' do
