@@ -15,6 +15,10 @@ class Workspace
     NoteDeleter.new(notebook, title, notebook_path(notebook), workspace_path).call
   end
 
+  def list_notes(notebook)
+    NoteLister.new(notebook).call
+  end
+
   def switch(workspace)
     return unless workspace_exists?(workspace) || create?('workspace')
 
@@ -27,24 +31,6 @@ class Workspace
     File.open(NotesCli::CONFIG_PATH, 'w') { |file| file.truncate(0) }
     File.open(NotesCli::CONFIG_PATH, 'r+') do |f|
       YAML.dump(current_config, f)
-    end
-  end
-
-  def list_notes(notebook)
-    raise StandardError, 'no such notebook' unless notebook_exists?(notebook)
-    entries = entries(notebook)
-    return entries if entries.any?
-
-    puts File.basename(current_workspace)
-    puts '----------------'
-    puts "#{notebook} is empty"
-  end
-
-  def entries(notebook)
-    {}.tap do |entries|
-      Dir.glob(File.join(notes_folder, current_workspace, notebook, '/*')).sort.each do |path|
-        entries[File.basename(path)] = path
-      end
     end
   end
 end
