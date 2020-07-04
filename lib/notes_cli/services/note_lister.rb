@@ -14,6 +14,8 @@ class NoteLister
     empty_notebook_notification
   end
 
+  private
+
   def handle_errors
     raise StandardError, 'no such notebook' unless notebook_exists?(@notebook)
   end
