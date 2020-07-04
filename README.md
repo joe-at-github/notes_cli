@@ -43,38 +43,28 @@ notes_folder/
 ```
 
 # Usage
-## Create a note in the current workspace
-```bash
-notes -n notebook note_title
-```
-
-## Switching workspaces
-```bash
-notes -w workspace_name
-```
-
-## Checking which workspace you are currently in
+## Check
+Checking which workspace you are currently in
 ```bash
 notes
 'Current workspace is ...'
 ```
 
-## Switching workspace and creating a note there
+## Create
+### Create a note in the current workspace
 ```bash
-notes -w workspace_name -n notebook note_title
+notes -n notebook note_title
 ```
 
-## Creating a note in a nested notebook
+### Creating a note in a nested notebook
 ```bash
 notes -n path/to/notebook note_title
 ```
-e.g
 ```bash
+# e.g
 notes -n saving_the_world/doing_charity_work list_of_charities
-```
 
-will produce
-```bash
+# will produce
 notes_folder/
 ├── personal_projects
 │   ├── saving_the_world
@@ -88,7 +78,13 @@ notes_folder/
             └── requirements.md
 ```
 
-## List view
+## Delete
+Delete a note
+```bash
+notes -d notebook note_title
+```
+
+## List
 Listing all notebooks in your workspace
 ```bash
 notes -l .
@@ -97,4 +93,15 @@ notes -l .
 Listing all notes in a given notebook
 ```bash
 notes -l notebook
+```
+
+## Switch
+Switching workspace
+```bash
+notes -w workspace_name
+```
+
+Switching workspace and creating a note there
+```bash
+notes -w workspace_name -n notebook note_title
 ```
