@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.authors     = ['Joe Lamy']
   s.email       = 'joeffreylamy41@gmail.com'
   s.files       = ['lib/notes_cli.rb']
+  s.executables << 'notes'
   s.homepage    =
     'https://rubygems.org/gems/notes_cli'
   s.license       = 'MIT'
