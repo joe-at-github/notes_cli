@@ -1,5 +1,6 @@
-require File.expand_path('../lib/notes_cli/version', __FILE__)
-
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'notes_cli/version'
 
 Gem::Specification.new do |s|
   s.name        = 'notes_cli'
@@ -13,12 +14,14 @@ Gem::Specification.new do |s|
   }.strip.gsub(/\s+/, ' ')
   s.authors     = ['Joeffrey Lamy']
   s.email       = 'joeffreylamy41@gmail.com'
-  s.files       = ['lib/notes_cli.rb']
+  s.files         = Dir.chdir(File.expand_path('..', __FILE__)) do
+    `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  end
   s.executables << 'notes'
+  s.require_paths = ['lib']
   s.homepage    =
     'https://rubygems.org/gems/notes_cli'
   s.license       = 'MIT'
-
   s.add_development_dependency 'fakefs'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'pry-byebug'
