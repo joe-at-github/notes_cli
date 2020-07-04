@@ -87,3 +87,14 @@ notes_folder/
         └── voice_chat
             └── requirements.md
 ```
+
+## List view
+Listing all notebooks in your workspace
+```bash
+notes -l .
+```
+
+Listing all notes in a given notebook
+```bash
+notes -l notebook
+```
