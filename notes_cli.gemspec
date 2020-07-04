@@ -6,7 +6,11 @@ Gem::Specification.new do |s|
   s.version     = NotesCli::VERSION
   s.date        = '2020-07-04'
   s.summary     = 'Easy note management from the command line'
-  s.description = 'A simple hello world gem'
+  s.description = %q{
+    Easily create, delete and list all your notes.
+    NotesCli lets you create workspaces and notebooks in which you can store notes.
+    Notes are created as md files for ease of storing code snippets.
+  }.strip.gsub(/\s+/, ' ')
   s.authors     = ['Joe Lamy']
   s.email       = 'joeffreylamy41@gmail.com'
   s.files       = ['lib/notes_cli.rb']
