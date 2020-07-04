@@ -2,8 +2,8 @@
 
 module NotesCli
   ROOTH_PATH = __dir__
-  CONFIG_PATH = File.join(ROOTH_PATH, 'config.yml')
   LIBRARY = File.join(ROOTH_PATH, 'notes_cli')
+  CONFIG_PATH = File.join(LIBRARY, 'config.yml')
 end
 
 require 'pry'
