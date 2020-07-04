@@ -30,7 +30,7 @@ RSpec.describe Workspace do
           FakeFS::FileSystem.clone(app)
           FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
 
-          expect { subject.current }.to raise_error(StandardError, 'Please set your workspace')
+          expect { subject.current_workspace }.to raise_error(StandardError, 'Please set your workspace')
         end
       end
     end
@@ -46,7 +46,7 @@ RSpec.describe Workspace do
           described_class.new.update_entry('notes_folder', app)
           described_class.new.update_entry('workspace', 'test_workspace')
 
-          expect { subject.current }.to_not raise_error
+          expect { subject.current_workspace }.to_not raise_error
         end
       end
     end
@@ -123,7 +123,7 @@ RSpec.describe Workspace do
   end
 
   describe 'listing notes' do
-    it 'list notes in the given notebook' do
+      it 'list notes in the given notebook' do
       FakeFS do
         allow(STDIN).to receive(:gets).and_return('y')
         app = File.expand_path('..', __dir__)
@@ -133,8 +133,9 @@ RSpec.describe Workspace do
         described_class.new.update_entry('workspace', 'test_workspace')
         described_class.new.create_note('new_notebook', ['test_note'])
         note_path = File.join('new_notebook', 'test_note.md')
+        expectation = { 'test_note.md' => note_path }
 
-        expect(subject.list_notes('new_notebook')).to include(note_path)
+        expect(subject.list_notes('new_notebook')).to eq(expectation)
       end
     end
 
