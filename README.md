@@ -1,3 +1,8 @@
+# Installation
+```bash 
+gem install notes_cli
+```
+
 # Getting started
 
 Tell notes_cli where your notes will be stored.
