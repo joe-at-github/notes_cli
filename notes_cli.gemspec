@@ -22,10 +22,10 @@ Gem::Specification.new do |s|
   s.homepage    =
     'https://rubygems.org/gems/notes_cli'
   s.license       = 'MIT'
-  s.add_development_dependency 'fakefs'
-  s.add_development_dependency 'pry'
-  s.add_development_dependency 'pry-byebug'
-  s.add_development_dependency 'rspec'
-  s.add_development_dependency 'rubocop'
-  s.add_development_dependency 'simplecov'
+  s.add_development_dependency 'fakefs', '~> 0.5'
+  s.add_development_dependency 'pry', '~> 0.12'
+  s.add_development_dependency 'pry-byebug', '~> 3.9'
+  s.add_development_dependency 'rspec', '~> 3.9'
+  s.add_development_dependency 'rubocop', '~> 0.86'
+  s.add_development_dependency 'simplecov', '~> 0.18'
 end
