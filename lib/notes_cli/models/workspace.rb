@@ -32,7 +32,15 @@ class Workspace
 
   def list_notes(notebook)
     raise StandardError, 'no such notebook' unless notebook_exists?(notebook)
+    entries = entries(notebook)
+    return entries if entries.any?
 
+    puts File.basename(current_workspace)
+    puts '----------------'
+    puts "#{notebook} is empty"
+  end
+
+  def entries(notebook)
     {}.tap do |entries|
       Dir.glob(File.join(notes_folder, current_workspace, notebook, '/*')).sort.each do |path|
         entries[File.basename(path)] = path

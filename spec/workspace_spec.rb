@@ -20,7 +20,7 @@ RSpec.describe Workspace do
     end
   end
 
-  describe '#current' do
+  describe '#current_workspace' do
     context 'no workspace setup' do
       subject { described_class.new }
 
@@ -138,7 +138,25 @@ RSpec.describe Workspace do
         expect(subject.list_notes('new_notebook')).to eq(expectation)
       end
     end
+   
+    context 'notebook is empty' do
+      it 'raises an error' do
+        FakeFS do
+          allow(STDIN).to receive(:gets).and_return('y')
+          app = File.expand_path('..', __dir__)
+          FakeFS::FileSystem.clone(app)
+          FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
+          described_class.new.update_entry('notes_folder', app)
+          described_class.new.update_entry('workspace', 'test_workspace')
+          described_class.new.create_note('new_notebook', ['test_note'])
+          described_class.new.delete_note('new_notebook', ['test_note'])
+          notification = /new_notebook is empty/
 
+          expect { subject.list_notes('new_notebook') }.to output(notification).to_stdout
+        end
+      end
+    end
+   
     context 'notebook does not exist' do
       it 'raises an error' do
         FakeFS do
