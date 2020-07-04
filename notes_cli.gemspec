@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.executables << 'notes'
   s.require_paths = ['lib']
   s.homepage    =
-    'https://rubygems.org/gems/notes_cli'
+    'https://github.com/joe-at-github/notes_cli'
   s.license       = 'MIT'
   s.add_development_dependency 'fakefs', '~> 0.5'
   s.add_development_dependency 'pry', '~> 0.12'
