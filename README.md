@@ -106,3 +106,10 @@ Switching workspace and creating a note there
 ```bash
 notes -w workspace_name -n notebook note_title
 ```
+
+## Help
+Display available commands
+
+```bash
+notes --help
+```

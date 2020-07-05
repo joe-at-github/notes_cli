@@ -8,11 +8,11 @@ if ARGV.empty?
 end
 
 OptionParser.new do |opt|
-  opt.on('-n --new_note TITLE PATH/TO/FILE') { |option| workspace.create_note(option, ARGV) }
+  opt.on('-n --new_note NOTEBOOK NOTE_TITLE') { |option| workspace.create_note(option, ARGV) }
 
-  opt.on('-d --delete_note TITLE PATH/TO/FILE ') { |option| workspace.delete_note(option, ARGV) }
+  opt.on('-d --delete_note NOTEBOOK NOTE_TITLE ') { |option| workspace.delete_note(option, ARGV) }
 
-  opt.on('-l --list_notes TITLE PATH/TO/NOTEBOOK') do |option|
+  opt.on('-l --list_notes NOTEBOOK NOTE_TITLE') do |option|
     workspace.list_notes(option)
   end
 
