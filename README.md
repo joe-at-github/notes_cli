@@ -5,25 +5,25 @@ gem install notes_cli
 
 # Getting started
 
-Tell notes_cli where your notes will be stored.
+Tell notes_cli where your notes will be stored
 ```bash
 notes --notes_folder path/to/where/you/will/store/notes
 ```
 
-Define your first workspace.
+Define your first workspace
 ```bash
 notes -w workspace_name
 ```
 
 # DSL
 ## Notes folder
-Where you will store all notes, including your workspaces and notebooks as the top layers.
+Where you will store all notes, including your workspaces and notebooks as the top layers
 
 ## Workspace
-Where you will store notebooks.
+Where you will store notebooks
 
 ## Notebook
-Where you will store notes.
+Where you will store notes
 
 ## Example
 Basic case scenario, where:  
