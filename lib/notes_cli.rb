@@ -6,8 +6,6 @@ module NotesCli
   CONFIG_PATH = File.join(LIBRARY, 'config.yml')
 end
 
-require 'pry'
-require 'pry-byebug'
 require 'yaml'
 require 'fileutils'
 require 'optparse'
