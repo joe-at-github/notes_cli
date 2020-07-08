@@ -57,12 +57,12 @@ notes
 ```
 
 ## Create
-### Create a note in the current workspace
+Create a note in the current workspace
 ```bash
 notes -n notebook note_title
 ```
 
-### Creating a note in a nested notebook
+Creating a note in a nested notebook
 ```bash
 notes -n path/to/notebook note_title
 ```
