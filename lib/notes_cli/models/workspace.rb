@@ -19,10 +19,20 @@ class Workspace
     NoteLister.new(notebook).call
   end
 
+  def open_notebook(notebook)
+    system("#{editor} #{notebook_path(notebook)}")
+  end
+
   def switch(workspace)
     return unless workspace_exists?(workspace) || create?('workspace')
 
     update_entry('workspace', workspace)
+  end
+
+  def editor
+    return config['editor'] if config && config['editor']
+
+    raise StandardError, 'Please set your editor'
   end
 
   def update_entry(key, value)

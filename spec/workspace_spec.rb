@@ -20,6 +20,38 @@ RSpec.describe Workspace do
     end
   end
 
+  describe '#editor' do
+    context 'no editor set' do
+      subject { described_class.new }
+
+      it 'raises an error' do
+        FakeFS do
+          app = File.expand_path('..', __dir__)
+          FakeFS::FileSystem.clone(app)
+          FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
+
+          expect { subject.editor }.to raise_error(StandardError, 'Please set your editor')
+        end
+      end
+    end
+
+    context 'editor setup' do
+      subject { described_class.new }
+
+      it 'doesnt raise an error' do
+        FakeFS do
+          app = File.expand_path('..', __dir__)
+          FakeFS::FileSystem.clone(app)
+          FileUtils.rm(NotesCli::CONFIG_PATH) if File.file?(NotesCli::CONFIG_PATH)
+          described_class.new.update_entry('notes_folder', app)
+          described_class.new.update_entry('editor', 'test_editor')
+
+          expect { subject.editor }.to_not raise_error
+        end
+      end
+    end
+  end
+
   describe '#current_workspace' do
     context 'no workspace setup' do
       subject { described_class.new }
