@@ -20,6 +20,11 @@ Define your first workspace
 notes -w workspace_name
 ```
 
+Set your default editor
+```bash
+notes -e subl
+```
+
 # DSL
 ## Notes folder
 Where you will store all notes, including your workspaces and notebooks as the top layers
@@ -99,6 +104,12 @@ notes -l .
 Listing all notes in a given notebook
 ```bash
 notes -l notebook
+```
+
+## Open
+Open a notebook in the context of your favourite editor
+```bash
+notes -o notebook
 ```
 
 ## Switch
