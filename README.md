@@ -1,5 +1,5 @@
 # About
-Easily create, delete and list all your notes.  
+Easily create, delete, list and open all your notes.  
 NotesCli lets you create workspaces and notebooks in which you can store notes.  
 Notes are created as md files for ease of storing code snippets.
 
