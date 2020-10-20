@@ -28,3 +28,6 @@ Add `notes -o --open_notebook` to allow users to open a notebook in the context 
 
 ## 1.0.0
 Specify a ruby version of 2.6.5.
+
+## 1.1.0
+Specify a ruby version of 2.3.5 for backward compatibility.

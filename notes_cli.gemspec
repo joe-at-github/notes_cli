@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.homepage    =
     'https://github.com/joe-at-github/notes_cli'
   s.license       = 'MIT'
-  s.required_ruby_version = Gem::Requirement.new('>= 2.6.5')
+  s.required_ruby_version = Gem::Requirement.new('>= 2.3.5')
   s.add_development_dependency 'fakefs', '~> 0.5'
   s.add_development_dependency 'pry', '~> 0.12'
   s.add_development_dependency 'pry-byebug', '~> 3.9'
